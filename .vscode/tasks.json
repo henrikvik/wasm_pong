@@ -1,0 +1,58 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "wasm build",
+            "command": "cargo",
+            "args": [
+                "+nightly",
+                "build",
+                "--target",
+                "wasm32-unknown-unknown"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "mkdir",
+            "command": "mkdir",
+            "args": [
+                "./target/webpack",
+                "-force"
+            ],
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
+            "dependsOn": [
+                "wasm build",
+                "mkdir"
+            ],
+            "type": "shell",
+            "label": "wasm bind",
+            "command": "wasm-bindgen",
+            "args": [
+                "./target/wasm32-unknown-unknown/debug/wasm_pong.wasm",
+                "--out-dir",
+                "./target/webpack"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "serve",
+            "type": "npm",
+            "script": "serve",
+            "path": "www/",
+            "problemMatcher": []
+        }
+    ]
+}
