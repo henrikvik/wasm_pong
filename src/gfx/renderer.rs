@@ -47,6 +47,7 @@ impl Renderer {
 
         let mut program = ShaderProgram::new(&gl, VERTEX_SOURCE, FRAGMENT_SOURCE);
 
+
         program.register_attribute(&gl, "vertex_position");
         program.register_attribute(&gl, "vertex_color");
         program.register_uniform(&gl, "projection");
