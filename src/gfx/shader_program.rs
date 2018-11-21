@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use web_sys::WebGl2RenderingContext as GL;
 use web_sys::{WebGlProgram, WebGlShader, WebGlUniformLocation};
 
-pub(in gfx) struct ShaderProgram {
+pub(super) struct ShaderProgram {
     program: WebGlProgram,
     attributes: HashMap<String, u32>,
     uniforms: HashMap<String, WebGlUniformLocation>,
@@ -10,7 +10,7 @@ pub(in gfx) struct ShaderProgram {
 
 impl ShaderProgram {
     pub fn new(gl: &GL, vertex_source: &str, fragment_source: &str) -> ShaderProgram {
-        let vertex_shader = compile_shader(&gl, GL::VERTEX_https://hastebin.com/ayagefozis.rsSHADER, vertex_source)
+        let vertex_shader = compile_shader(&gl, GL::VERTEX_SHADER, vertex_source)
             .expect("vertex shader compile error");
         let fragment_shader = compile_shader(&gl, GL::FRAGMENT_SHADER, fragment_source)
             .expect("fragment shader compile error");
@@ -117,7 +117,7 @@ fn link_program(
 
 use nalgebra as na;
 
-pub(gfx) trait UniformPayload {
+pub(super) trait UniformPayload {
     fn upload(&mut self, gl: &GL, location: &WebGlUniformLocation);
 }
 

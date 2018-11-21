@@ -2,7 +2,7 @@
 use std::f32;
 use nalgebra::{Isometry3, Perspective3, Point3, Vector3, Matrix4};
 
-pub struct Camera {
+pub(super) struct Camera {
     view: Isometry3<f32>,
     projection: Perspective3<f32>,
 }

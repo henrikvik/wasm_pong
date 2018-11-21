@@ -6,3 +6,6 @@ use self::shader_program::{ShaderProgram};
 
 mod camera;
 use self::camera::Camera;
+
+mod buffer;
+use self::buffer::Buffer;
