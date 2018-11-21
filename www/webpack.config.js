@@ -10,5 +10,5 @@ module.exports = {
     plugins: [
         new HtmlPlugin({ title: "wasm_pong" })
     ],
-    mode: "development"
+    mode: "development",
 }
