@@ -35,11 +35,11 @@ impl App {
         let width = 400;
         let height = 400;
 
-        let window = web_sys::window().expect("no window");
+        let window : Window = web_sys::window().expect("no window");
         let document = window.document().expect("no document");
         Self::add_style(
             &document,
-            "html { 
+            "html {
                 height: 100%;
             }
 
@@ -52,7 +52,7 @@ impl App {
                 justify-content: center;
                 align-items: center;
             }
-            
+
             canvas {
                 max-width: 100%;
                 max-height: 100%;
