@@ -35,8 +35,9 @@ impl App {
         let width = 400;
         let height = 400;
 
-        let window : Window = web_sys::window().expect("no window");
+        let window = web_sys::window().expect("no window");
         let document = window.document().expect("no document");
+
         Self::add_style(
             &document,
             "html {
@@ -66,7 +67,8 @@ impl App {
 
         canvas.set_width(width);
         canvas.set_height(height);
-        document.body().expect("no body").append_child(&canvas).expect("failed to append");
+        document.body().expect("no body")
+            .append_child(&canvas).expect("failed to append");
 
         let gl: WebGl2RenderingContext = canvas
             .get_context("webgl2").expect("failed to get context").unwrap()

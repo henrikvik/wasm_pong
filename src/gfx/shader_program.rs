@@ -57,6 +57,9 @@ impl ShaderProgram {
     }
 
     pub fn upload_uniform(&self, gl: &GL, name: &str, payload: &mut UniformPayload) {
+
+        // TODO Check if program is bound
+
         let location = self
             .uniforms
             .get(name)

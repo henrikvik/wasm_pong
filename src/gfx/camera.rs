@@ -11,9 +11,6 @@ impl Camera {
     pub fn new(aspect : f32, fov_deg : f32, eye: Point3<f32>, target: Point3<f32>) -> Camera {
 
         let projection = Perspective3::new(aspect, deg_to_rad(fov_deg), 0.01, 100.0);
-
-        
-
         let view = Isometry3::look_at_rh(&eye, &target, &Vector3::y());
 
         Camera {

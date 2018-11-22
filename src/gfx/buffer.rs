@@ -15,21 +15,17 @@ impl Buffer {
 
     pub fn set_attribute_ptr(&self, gl : &GL, location: u32, num_components: i32) {
         gl.bind_buffer(GL::ARRAY_BUFFER, Some(&self.buffer));
-
         gl.vertex_attrib_pointer_with_i32(location, num_components, GL::FLOAT, false, 0, 0);
-        
         gl.bind_buffer(GL::ARRAY_BUFFER, None);
     }
 
     pub fn upload_data(&self, gl : &GL, data : &[f32]) {
         gl.bind_buffer(GL::ARRAY_BUFFER, Some(&self.buffer));
-
         gl.buffer_data_with_array_buffer_view(
             GL::ARRAY_BUFFER,
             &js_array_wrapper(data.as_ref()),
             GL::STATIC_DRAW,
         );
-
         gl.bind_buffer(GL::ARRAY_BUFFER, None);
     }
 }
