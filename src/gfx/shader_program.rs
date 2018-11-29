@@ -1,8 +1,32 @@
 use std::collections::HashMap;
+use std::sync::Mutex;
 use web_sys::WebGl2RenderingContext as GL;
 use web_sys::{WebGlProgram, WebGlShader, WebGlUniformLocation};
 
+lazy_static! {
+    static ref ACTIVE_UID: Mutex<u32> = Mutex::new(0);
+}
+
+fn get_active_uid() -> u32 {
+    *ACTIVE_UID.lock().unwrap()
+}
+
+fn set_active_uid(uid: u32) {
+    *ACTIVE_UID.lock().unwrap() = uid;
+}
+
+fn get_next_uid() -> u32 {
+    lazy_static! {
+        static ref NEXT_UID: Mutex<u32> = Mutex::new(0);
+    }
+    let mut next_uid = NEXT_UID.lock().unwrap();
+    *next_uid += 1;
+    *next_uid
+}
+
 pub(super) struct ShaderProgram {
+    uid: u32,
+
     program: WebGlProgram,
     attributes: HashMap<String, u32>,
     uniforms: HashMap<String, WebGlUniformLocation>,
@@ -18,6 +42,7 @@ impl ShaderProgram {
         let program = link_program(&gl, &vertex_shader, &fragment_shader).unwrap();
 
         ShaderProgram {
+            uid: get_next_uid(),
             program,
             uniforms: HashMap::new(),
             attributes: HashMap::new(),
@@ -30,6 +55,8 @@ impl ShaderProgram {
         for (_, location) in self.attributes.iter() {
             gl.enable_vertex_attrib_array(location.clone());
         }
+
+        set_active_uid(self.uid);
     }
 
     pub fn register_attribute(&mut self, gl: &GL, name: &str) {
@@ -57,8 +84,7 @@ impl ShaderProgram {
     }
 
     pub fn upload_uniform(&self, gl: &GL, name: &str, payload: &mut UniformPayload) {
-
-        // TODO Check if program is bound
+        assert_eq!(self.uid, get_active_uid());
 
         let location = self
             .uniforms

@@ -36,6 +36,8 @@ pub struct Renderer {
     buffers: HashMap<String, Buffer>,
     camera: Camera,
     i: f32,
+
+    model : na::SimilarityMatrix3<f32>,
 }
 
 impl Renderer {
@@ -107,6 +109,8 @@ impl Renderer {
             program,
             buffers,
             camera,
+
+            model : na::SimilarityMatrix3::identity(),
         }
     }
 
@@ -116,14 +120,17 @@ impl Renderer {
 
     pub fn draw(&mut self) {
         self.clear();
-        self.i += 0.05;
+        self.i += 0.01;
 
         self.program.use_program(&self.gl);
+
+        self.model.append_rotation_mut(&na::Rotation3::from_euler_angles(0.02,0.01,0.03));
+        self.model.prepend_scaling_mut(1.0 + (1.0 - self.i % 2.0) / 100.0);
 
         self.program.upload_uniform(
             &self.gl,
             "model",
-            &mut na::Matrix4::<f32>::from_euler_angles(0.6, self.i, 0.0),
+            &mut self.model.to_homogeneous(),
         );
 
         self.gl.draw_arrays(GL::TRIANGLE_STRIP, 0, 4);
